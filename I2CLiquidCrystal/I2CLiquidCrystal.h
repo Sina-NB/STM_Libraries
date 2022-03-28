@@ -19,7 +19,7 @@ using namespace std;
 class I2CLiquidCrystal
 {
 public:
-    I2CLiquidCrystal(I2C_HandleTypeDef* hi2c, uint8_t Address, uint8_t LCDType);
+    void begin (I2C_HandleTypeDef* hi2c, uint8_t Address, uint8_t LCDType); // initial setting
     void send_cmd (char cmd);  // send command to lcd
     void send_data (char data);  // send data to lcd
     void init (void);   // initialize lcd

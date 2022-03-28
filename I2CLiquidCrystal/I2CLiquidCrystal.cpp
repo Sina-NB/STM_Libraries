@@ -1,6 +1,6 @@
 #include "I2CLiquidCrystal.h"
 
-I2CLiquidCrystal::I2CLiquidCrystal(I2C_HandleTypeDef* hi2c, uint8_t Address, uint8_t LCDType)
+void I2CLiquidCrystal::begin(I2C_HandleTypeDef* hi2c, uint8_t Address, uint8_t LCDType)
 {
 	_hi2c = hi2c;
 	_Address = Address;
