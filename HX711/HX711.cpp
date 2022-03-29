@@ -3,7 +3,8 @@
 uint8_t HX711::shiftIn(uint8_t bitOrder) {
     uint8_t value = 0;
     uint8_t i;
-
+	
+	HAL_GPIO_WritePin(clk_gpio, clk_pin, GPIO_PIN_RESET);
     for(i = 0; i < 8; ++i) {
         HAL_GPIO_WritePin(clk_gpio, clk_pin, GPIO_PIN_SET);
         DWT_Delay_us(1);
