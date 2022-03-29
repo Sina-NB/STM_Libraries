@@ -5,6 +5,29 @@ void I2CLiquidCrystal::begin(I2C_HandleTypeDef* hi2c, uint8_t Address, uint8_t L
 	_hi2c = hi2c;
 	_Address = Address;
 	_LCDType = LCDType;
+
+	// 4 bit initialization
+	HAL_Delay(50);  // wait for >40ms
+	send_cmd (0x30);
+	HAL_Delay(5);  // wait for >4.1ms
+	send_cmd (0x30);
+	HAL_Delay(1);  // wait for >100us
+	send_cmd (0x30);
+	HAL_Delay(10);
+	send_cmd (0x20);  // 4bit mode
+	HAL_Delay(10);
+
+  // display initialization
+	send_cmd (0x28); // Function set --> DL=0 (4 bit mode), N = 1 (2 line display) F = 0 (5x8 characters)
+	HAL_Delay(1);
+	send_cmd (0x08); //Display on/off control --> D=0,C=0, B=0  ---> display off
+	HAL_Delay(1);
+	send_cmd (0x01);  // clear display
+	HAL_Delay(1);
+	HAL_Delay(1);
+	send_cmd (0x06); //Entry mode set --> I/D = 1 (increment cursor) & S = 0 (no shift)
+	HAL_Delay(1);
+	send_cmd (0x0C); //Display on/off control --> D = 1, C and B = 0. (Cursor and blink, last two bits)
 }
 
 void I2CLiquidCrystal::send_cmd (char cmd)
@@ -31,32 +54,6 @@ void I2CLiquidCrystal::send_data (char data)
 	data_t[2] = data_l|0x0D;  //en=1, rs=1
 	data_t[3] = data_l|0x09;  //en=0, rs=1
 	HAL_I2C_Master_Transmit (_hi2c, _Address,(uint8_t *) data_t, 4, 100);
-}
-
-void I2CLiquidCrystal::init (void)
-{
-	// 4 bit initialization
-	HAL_Delay(50);  // wait for >40ms
-	send_cmd (0x30);
-	HAL_Delay(5);  // wait for >4.1ms
-	send_cmd (0x30);
-	HAL_Delay(1);  // wait for >100us
-	send_cmd (0x30);
-	HAL_Delay(10);
-	send_cmd (0x20);  // 4bit mode
-	HAL_Delay(10);
-
-  // display initialization
-	send_cmd (0x28); // Function set --> DL=0 (4 bit mode), N = 1 (2 line display) F = 0 (5x8 characters)
-	HAL_Delay(1);
-	send_cmd (0x08); //Display on/off control --> D=0,C=0, B=0  ---> display off
-	HAL_Delay(1);
-	send_cmd (0x01);  // clear display
-	HAL_Delay(1);
-	HAL_Delay(1);
-	send_cmd (0x06); //Entry mode set --> I/D = 1 (increment cursor) & S = 0 (no shift)
-	HAL_Delay(1);
-	send_cmd (0x0C); //Display on/off control --> D = 1, C and B = 0. (Cursor and blink, last two bits)
 }
 
 void I2CLiquidCrystal::clear (void)
